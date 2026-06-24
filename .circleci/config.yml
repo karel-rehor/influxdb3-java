@@ -228,8 +228,8 @@ jobs:
       - run:
           name: Verify versions
           command: |
-            java version
-            mvn version
+            java --version
+            mvn --version
       - run:
           name: Release Script
           command: ./scripts/on-release.sh
