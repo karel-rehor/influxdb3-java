@@ -232,7 +232,10 @@ jobs:
             mvn --version
       - run:
           name: Release Script
-          command: ./scripts/on-release.sh
+          command: |
+            sudo apt-get update
+            sudo apt-get install libxml2-utils
+            ./scripts/on-release.sh
 
 release_filter: &release_filter
   filters:
