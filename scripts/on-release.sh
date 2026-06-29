@@ -191,6 +191,8 @@ upload_next_release(){
   git commit -am "chore: prepare for next development iteration [skip ci]"
   # following is a DEBUG check TODO - remove
   git log -1
+
+  git push --set-upstream origin "${NEXT_RELEASE_BRANCH}"
 }
 
 
