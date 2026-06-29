@@ -193,6 +193,12 @@ upload_next_release(){
   git log -1
 
   git push --set-upstream origin "${NEXT_RELEASE_BRANCH}"
+
+  if [ $? -ne 0 ]
+  then
+    printf "Push of branch %s to GitHub failed.  Exiting...\n" "${NEXT_RELEASE_BRANCH}"
+    exit 1
+  fi
 }
 
 
