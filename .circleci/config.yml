@@ -236,6 +236,8 @@ jobs:
             sudo apt-get update
             sudo apt-get install libxml2-utils
             ./scripts/on-release.sh
+      - store_artifacts:
+          path: /tmp/artifacts
 
 release_filter: &release_filter
   filters:
