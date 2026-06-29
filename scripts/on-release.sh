@@ -24,6 +24,7 @@ CURRENT_BRANCH=$(git branch --show-current)
 
 RELEASE_NUM=""
 NEXT_RELEASE_NUM=""
+NEXT_RELEASE_BRANCH_BASE="chore/prepare-next-release-"
 
 RC_OR_BETA=false
 IS_SNAPSHOT=false
@@ -142,16 +143,15 @@ publish_to_maven(){
 }
 
 update_pom_version(){
-  printf "Updating version in %s" "${1}"
+  printf "Updating version in %s\n" "${1}"
 
   xmllint --shell "${1}" << HERE
 cd //*[local-name()='project']/*[local-name()='version']
-cat .
 set ${NEXT_RELEASE_NUM}-SNAPSHOT
-cat .
 save
 bye
 HERE
+  printf "\n"
 }
 
 prepare_next_version(){
@@ -171,12 +171,31 @@ prepare_next_version(){
 
   update_pom_version "${EXAMPLES_POM_XML_PATH}"
 
-  echo "DEBUG xmllint --shell result: " $?
-
+  printf "\n"
 }
 
+upload_next_release(){
+  if ! [ "${CIRCLECI}" == true  ]
+  then
+    printf "This script uploads next release from CIRCLECI only.\n"
+    printf "The CIRCLECI environment tag is %s\n" "${CIRCLECI}"
+    printf "Exiting\n"
+    exit 1
+  fi
+  NEXT_RELEASE_BRANCH="${NEXT_RELEASE_BRANCH_BASE}${NEXT_RELEASE_NUM}"
+  printf "Uploading next release to %s\n" "$NEXT_RELEASE_BRANCH"
+  git config user.name "builder"
+  git config uers.email "builder@bonitoo.io"
+  git branch "${NEXT_RELEASE_BRANCH}"
+  git switch "${NEXT_RELEASE_BRANCH}"
+  git commit -am "chore: prepare for next development iteration [skip ci]"
+  # following is a DEBUG check TODO - remove
+  git log -1
+}
+
+
 store_artifacts(){
-  mkdir /tmp/artifacts
+  mkdir -p /tmp/artifacts
   cp "${POM_XML_PATH}" /tmp/artifacts
   cp "${EXAMPLES_POM_XML_PATH}" /tmp/artifacts/examples_pom.xml
   cp "${CHANGELOG_PATH}" /tmp/artifacts
@@ -201,6 +220,7 @@ publish_to_maven
 
 set_next_release_number
 prepare_next_version
+upload_next_release
 
 # TODO these are verification steps to be removed before release
 store_artifacts
