@@ -185,7 +185,7 @@ upload_next_release(){
   NEXT_RELEASE_BRANCH="${NEXT_RELEASE_BRANCH_BASE}${NEXT_RELEASE_NUM}"
   printf "Uploading next release to %s\n" "$NEXT_RELEASE_BRANCH"
   git config --global user.name "builder"
-  git config  --global uers.email "builder@bonitoo.io"
+  git config --global user.email "builder@bonitoo.io"
   git branch "${NEXT_RELEASE_BRANCH}"
   git switch "${NEXT_RELEASE_BRANCH}"
   git commit -am "chore: prepare for next development iteration [skip ci]"
