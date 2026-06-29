@@ -199,6 +199,9 @@ upload_next_release(){
     printf "Push of branch %s to GitHub failed.  Exiting...\n" "${NEXT_RELEASE_BRANCH}"
     exit 1
   fi
+
+  printf "Updates for next release cycle have been pushed to GitHub in branch %s\n" "${NEXT_RELEASE_BRANCH}"
+  printf "Please...\n   1. review them\n   2. and then manually create a PR in GitHub to merge them into main.\n"
 }
 
 
