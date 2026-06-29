@@ -247,15 +247,14 @@ test_latest(){
   printf "DEBUG NEXT_RELEASE_NUM %s\n" "${NEXT_RELEASE_NUM}"
 }
 
-
-
-setup
 verify_rc_or_beta
 set_release_number
 
 verify_changelog
 verify_readme
 verify_version
+
+setup
 
 publish_to_maven
 
