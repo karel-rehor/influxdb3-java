@@ -216,6 +216,9 @@ jobs:
       - image: << pipeline.parameters.default-maven-image >>
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:7BtumsAJGZWubAUe0uzmfWZNfzcRt7Wq0/IulpxXt9M"
       - run:
           name: Verify Envars
           command: |  
