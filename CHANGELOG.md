@@ -1,4 +1,8 @@
-## 1.11.0 [unreleased]
+## 0.0.0 [2026-06-29]
+
+### Features
+
+1. [#test](https://www.dpp.cz): test entry
 
 ## 1.10.0 [2026-06-11]
 
