@@ -220,7 +220,7 @@ jobs:
           command: |
             echo "Checking $CIRCLE_PROJECT_USERNAME"
             # N.B. second repository temporarily added for troubleshooting, TODO remove before PR merge
-            repositories=["influxCommunity"]
+            repositories=["influxCommunity", "karel-rehor"]
             if ! [[ ${repositories[*]} =~ "$CIRCLE_PROJECT_USERNAME" ]]; then
               echo "Cannot run release from $CIRCLE_PROJECT_USERNAME.  Failing this step."
               exit 1
