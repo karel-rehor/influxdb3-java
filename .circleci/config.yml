@@ -219,7 +219,7 @@ jobs:
           name: Quick return if this if not from an approved repository
           command: |
             # N.B. second repository temporarily added for troubleshooting, TODO remove before PR merge
-            repositories=["influxdata","karel-rehor"]
+            repositories=["influxdata"]
             if ! [[ ${repositories[*]} =~ "$CIRCLECI_PROJECT_USERNAME" ]]; then
               echo "Nothing to do for $CIRCLECI_PROJECT_USERNAME.  Marking this step a success."
               circleci step halt
