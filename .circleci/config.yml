@@ -221,8 +221,8 @@ jobs:
             # N.B. second repository temporarily added for troubleshooting, TODO remove before PR merge
             repositories=["influxCommunity"]
             if ! [[ ${repositories[*]} =~ "$CIRCLECI_PROJECT_USERNAME" ]]; then
-              echo "Nothing to do for $CIRCLECI_PROJECT_USERNAME.  Marking this step a success."
-              circleci step halt
+              echo "Cannot run release from $CIRCLECI_PROJECT_USERNAME.  Failing this step."
+              exit 1
             fi
       - checkout
       - add_ssh_keys:
