@@ -218,11 +218,14 @@ jobs:
       - run:
           name: Quick return if this if not from an approved repository
           command: |
+            echo "Checking $CIRCLE_PROJECT_USERNAME"
             # N.B. second repository temporarily added for troubleshooting, TODO remove before PR merge
             repositories=["influxCommunity"]
-            if ! [[ ${repositories[*]} =~ "$CIRCLECI_PROJECT_USERNAME" ]]; then
-              echo "Cannot run release from $CIRCLECI_PROJECT_USERNAME.  Failing this step."
+            if ! [[ ${repositories[*]} =~ "$CIRCLE_PROJECT_USERNAME" ]]; then
+              echo "Cannot run release from $CIRCLE_PROJECT_USERNAME.  Failing this step."
               exit 1
+            else
+              echo "Proceeding with release from ${CIRCLE_PROJECT_USERNAME}"
             fi
       - checkout
       - add_ssh_keys:
