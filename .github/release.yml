@@ -1,0 +1,125 @@
+name: Release
+on:
+  workflow_dispatch:
+
+  release:
+    types: [created]
+
+jobs:
+  release:
+    permissions:
+      contents: write # may want to update version
+    runs-on: ubuntu-latest
+    env:
+      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      MAVEN_SETTINGS_EXPERIM: ${{ vars.MAVEN_SETTINGS_FILE }}
+      GPG_PASSPHRASE_PRELIM: ${{ secrets.GPG_PASSPHRASE }}
+      RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+      IS_PRERELEASE: ${{ github.event.release.prerelease }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+      - name: Add dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libxml2-utils
+      - name: Script
+        run: |
+          echo "DEBUG IS_PRERELEASE ^^^${IS_PRERELEASE}^^^"
+          echo "DEBUG GITHUB_ACTOR ${GITHUB_ACTOR}"
+          ./scripts/on-release.sh
+      - name: Verify
+        run: |
+          if [[ -n "$SONATYPE_USERNAME" ]]
+          then
+            echo "DEBUG have SONATYPE_USERNAME"
+          else 
+            echo "Release requires SONATYPE_USERNAME, which was not found. exiting"
+            exit 1
+          fi
+
+          if [[ -n "$SONATYPE_PASSWORD" ]]
+          then
+            echo "have SONATYPE_PASSWORD"
+          else 
+            echo "Release requires SONATYPE_PASSWORD, which was not found. exiting"
+            exit 1
+          fi
+
+          if [[ -n "$GPG_PASSPHRASE_PRELIM" ]]
+          then
+            echo "have GPG_PASSPHRASE_PRELIM"
+          else
+            echo "Release requires GPG_PASSPHRASE, which was not found. exiting"
+            exit 1
+          fi
+
+          if [[ "$GPG_PASSPHRASE_PRELIM" == "EMPTY" ]]
+          then
+            echo "GPG_PASSPHRASE empty requested"
+            export GPG_PASSPHRASE=""
+          else
+            export GPG_PASSPHRASE="$GPG_PASSPHRASE_PRELIM"
+          fi
+
+          echo "DEBUG GPG_PASSPHRASE ${GPG_PASSPHRASE}"
+
+          echo "GPG_PASSPHRASE=${GPG_PASSPHRASE}" >> $GITHUB_ENV
+
+          echo "ROVER_ACTION=JUMP_THE_FENCE" >> $GITHUB_ENV
+
+          # Verify GPG2 environment
+          if ! command -v gpg2 &> /dev/null
+          then
+            echo "Failed to locate gpg2 on this host.  GPG2 is required to continue."
+            exit 1
+          fi
+          
+          gpg2 --version
+          export GPG_EXECUTABLE=$(command -v gpg2)
+          echo "DEBUG GPG_EXECUTABLE ${GPG_EXECUTABLE}"
+
+          echo "DEBUG MAVEN_SETTINGS_EXPERIM ${MAVEN_SETTINGS_EXPERIM}"
+          echo "DEBUG MAVEN_SETTINGS_FILE ${{ vars.MAVEN_SETTINGS_FILE }}"
+
+          # N.B. this is for debugging only.  TODO remove before release
+          mvn -s ${{ vars.MAVEN_SETTINGS_FILE }} help:effective-settings
+          # mvn help:effective-settings
+      - name: Build
+        run: |
+          mvn clean install
+          echo "=== DEBUG Check build results ==="
+          ls -al ./target
+      - name: Release
+        run: |
+          echo "DEBUG GPG_PASSPHRASE #${{ env.GPG_PASSPHRASE }}#"
+          echo "DEBUG ROVER_ACTION ${{ env.ROVER_ACTION }}"
+          echo "=== DEBUG Ensure build shared ==="
+          ls -al ./target
+          if [[ "${IS_PRERELEASE}" == "true" ]]; then
+             echo "This is a pre release and will not be deployed to Maven Central."
+             exit 0
+          fi
+
+          echo "Proceeding with release to Maven Central"
+          # TODO reactivate - temporarily deactivated while investigating other aspects of working with actions.
+          # mvn -s ./settings.xml deploy -DperformRelease=true
+      - name: Prepare next cycle
+        run: |
+          if [[ "${IS_PRERELEASE}" == "true" ]]; then
+            echo "This is a prerelease so the next release cycle will not be prepared."
+            echo "TODO exit cleanly here.  But for debugging purposes currently continue"
+          fi
+          echo "Preparing next release cycle"
+          gh --version
+          # gh pr create -B base_branch -H branch_to_merge --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+
