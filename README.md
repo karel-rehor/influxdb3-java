@@ -49,9 +49,11 @@ Add the latest version of the client to your project:
 <dependency>
     <groupId>com.influxdb</groupId>
     <artifactId>influxdb3-java</artifactId>
-    <version>1.10.0</version>
+    <version>1.11.0</version>
 </dependency>
 ```
+
+__N.B. above is a temporary change to verify CI action__
 
 ### Or when using Gradle
 
