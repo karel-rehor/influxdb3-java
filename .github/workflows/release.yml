@@ -97,7 +97,7 @@ jobs:
           # mvn help:effective-settings
       - name: Build
         run: |
-          mvn clean install
+          mvn clean install -DargLine="--add-opens=java.base/java.nio=ALL-UNNAMED"
           echo "=== DEBUG Check build results ==="
           ls -al ./target
       - name: Release
