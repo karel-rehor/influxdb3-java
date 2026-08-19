@@ -25,6 +25,8 @@
     </a>
 </p>
 
+**N.B.  This is an experimental branch**
+
 # InfluxDB 3 Java Client
 
 The Java client that provides an easy and convenient way to interact with InfluxDB 3.
