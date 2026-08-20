@@ -1,6 +1,4 @@
-## 1.11.0 [2026-08-18]
-
-__N.B. this is a test release.  Revert above date to "unreleased" after ci checks.__
+## 1.11.0 [unreleased]
 
 ### Breaking Changes
 
