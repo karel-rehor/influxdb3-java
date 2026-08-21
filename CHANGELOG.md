@@ -1,5 +1,15 @@
 ## 1.11.0 [unreleased]
 
+### karel-rehor fork TODOs
+
+- `pom.xml`
+  1. cleanup to get stable working release with `central-publishing-maven-plugin`.
+  2. Once the above is proven to work - revert `scm` and other values to `influxCommunity` before creating PR.
+- `.github/workflows/release.yml` - some tasks defined in `release.yml` are covered by the maven release plugin workflow.  This includes automated tag generation, which may cause conflicts.  So, the workflow needs a review and some revisions.
+- Full cycle test with above changes - then drop test release.
+- Document new releasing procedures in `README.md` and in bonitoo docs.
+- Cleanup, including removing this TODO List, and create PR.
+
 ### Breaking Changes
 
 1. [#407](https://github.com/InfluxCommunity/influxdb3-java/pull/407): Upgrade minimum JDK requirement to version 17.
