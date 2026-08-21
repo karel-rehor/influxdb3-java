@@ -64,9 +64,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:InfluxCommunity/influxdb3-java.git</connection>
-        <developerConnection>scm:git:git@github.com:InfluxCommunity/influxdb3-java.git</developerConnection>
-        <url>https://github.com/InfluxCommunity/influxdb3-java/tree/main</url>
+        <connection>scm:git:git@github.com:karel-rehor/influxdb3-java.git</connection>
+        <developerConnection>scm:git:git@github.com:karel-rehor/influxdb3-java.git</developerConnection>
+        <url>https://github.com/karel-rehor/influxdb3-java/tree/main</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -81,7 +81,7 @@
         </repository>
         <site>
             <id>GitHubPages</id>
-            <url>https://InfluxCommunity.github.io/influxdb3-java/</url>
+            <url>https://github.com/karel-rehor/influxdb3-java</url>
         </site>
     </distributionManagement>
 
