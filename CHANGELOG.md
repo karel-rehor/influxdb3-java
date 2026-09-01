@@ -1,4 +1,6 @@
-## 1.11.0 [unreleased]
+## 1.12.0 [unreleased]
+
+## 1.11.0 [2026-08-27]
 
 ### karel-rehor fork TODOs
 
