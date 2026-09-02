@@ -28,7 +28,7 @@
     <groupId>io.github.karel-rehor</groupId>
     <artifactId>influxdb3-java</artifactId>
     <packaging>jar</packaging>
-    <version>1.12.0</version>
+    <version>1.12.0-SNAPSHOT</version>
 
     <name>InfluxDB 3 Java Client</name>
     <description>
