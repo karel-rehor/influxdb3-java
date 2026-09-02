@@ -43,3 +43,4 @@ jobs:
           scm.tag=${RELEASE_TAG_NAME}
           EOF
           cat release.properties
+          ls -al
