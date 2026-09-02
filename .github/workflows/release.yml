@@ -2,9 +2,10 @@ name: Release
 on:
   workflow_dispatch:
 
-  release:
-    types: [created]
-    branches:
+# temporarily block this while working with maven-release.yml
+#  release:
+#    types: [created]
+#    branches:
 
 jobs:
   release:
