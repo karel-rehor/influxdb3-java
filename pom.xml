@@ -64,7 +64,7 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:karel-rehor/influxdb3-java.git</connection>
+        <connection>scm:git:https://github.com/karel-rehor/influxdb3-java.git</connection>
         <developerConnection>scm:git:git@github.com:karel-rehor/influxdb3-java.git</developerConnection>
         <url>https://github.com/karel-rehor/influxdb3-java/tree/main</url>
         <tag>v1.12.0</tag>
