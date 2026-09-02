@@ -18,6 +18,7 @@ jobs:
       RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
       IS_PRERELEASE: ${{ github.event.release.prerelease }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPO: ${{ github.repository }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -35,3 +36,10 @@ jobs:
       - name: Check environment
         run: |
           env
+      - name: Model release
+        run: |
+          cat << EOF > release.properties
+          scm.url=scm\:git\:https\://github.com/${GITHUB_REPOSITORY}.git
+          scm.tag=${RELEASE_TAG_NAME}
+          EOF
+          cat release.propertie
