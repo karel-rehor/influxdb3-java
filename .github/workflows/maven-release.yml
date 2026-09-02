@@ -42,4 +42,4 @@ jobs:
           scm.url=scm\:git\:https\://github.com/${GITHUB_REPOSITORY}.git
           scm.tag=${RELEASE_TAG_NAME}
           EOF
-          cat release.propertie
+          cat release.properties
