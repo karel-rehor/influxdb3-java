@@ -10,18 +10,63 @@ e.g. On a Linux box...
 
 ```
 $ head -c 6 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9+-'
-HiF4YcF
+jEtkLlyG
 ```
-
 Store this somewhere safe.
 
 2. Generate a key with a passphrase and no expiration. 
 
 ```
-gpg --batch --passphrase=<GENERATED_PASSWORD> --quick-generate-key "<your-username>@users.noreply.github.com" default default never
+$ gpg --batch --passphrase=<GENERATED_PASSPHRASE> --quick-generate-key "karel-rehor@users.noreply.github.com" default default never
+gpg: revocation certificate stored as '/home/karl/.gnupg/openpgp-revocs.d/REDACTED_KEY_ID.rev'
 ```
 
-TODO - to be continued.
+3. Verify key.
+
+```
+$ gpg --list-keys
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+/home/karl/.gnupg/pubring.kbx
+-----------------------------
+pub   ed25519 2026-09-03 [SC]
+      REDACTED_KEY_ID
+uid           [ultimate] karel-rehor@users.noreply.github.com
+sub   cv25519 2026-09-03 [E]
+```
+
+4. Distribute the key.
+
+```
+$ gpg2 --keyserver keyserver.ubuntu.com --send-keys REDACTED_KEY_ID
+gpg: sending key REDACETD to hkp://keyserver.ubuntu.com
+```
+
+5. Verify key is on remote.  Note, that it may take a few minutes to be registered.
+
+```
+$ gpg2 --keyserver keyserver.ubuntu.com --search-keys REDACTED_KEY_ID
+gpg: data source: http://185.125.188.27:11371
+(1)	karel-rehor@users.noreply.github.com
+	  263 bit EDDSA key REDACTED, created: 2026-09-03
+Keys 1-1 of 1 for "REDACTED_KEY_ID".  Enter number(s), N)ext, or Q)uit > 1
+gpg: key REDACTED: "karel-rehor@users.noreply.github.com" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+```
+
+6. Get the secret key associated with this key.  It will need to be copied then pasted to the Github project secret GPG_PRIVATE_KEY.  Note you will be prompted for the passphrase.
+
+```
+$ gpg2 --export-secret-keys --armor REDACTED_KEY_ID
+-----BEGIN PGP PRIVATE KEY BLOCK-----
+
+   ...REDACTED...
+
+-----END PGP PRIVATE KEY BLOCK-----
+```
+
 
 ### Addenda 
 
