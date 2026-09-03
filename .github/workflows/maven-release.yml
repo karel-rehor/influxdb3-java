@@ -35,7 +35,65 @@ jobs:
           sudo apt-get install libxml2-utils
       - name: Check environment
         run: |
+          # TODO this is a debug step and can be removed before push to production
           env
+      - name: Verify
+        run: |
+          if [[ -n "$SONATYPE_USERNAME" ]]
+          then
+            echo "DEBUG have SONATYPE_USERNAME"
+          else
+            echo "Release requires SONATYPE_USERNAME, which was not found. exiting"
+            exit 1
+          fi
+
+          if [[ -n "$SONATYPE_PASSWORD" ]]
+          then
+            echo "have SONATYPE_PASSWORD"
+          else
+            echo "Release requires SONATYPE_PASSWORD, which was not found. exiting"
+            exit 1
+          fi
+
+          if [[ -n "$GPG_PASSPHRASE_PRELIM" ]]
+          then
+            echo "have GPG_PASSPHRASE_PRELIM"
+          else
+            echo "Release requires GPG_PASSPHRASE, which was not found. exiting"
+            exit 1
+          fi
+
+          if [[ "$GPG_PASSPHRASE_PRELIM" == "EMPTY" ]]
+          then
+            echo "GPG_PASSPHRASE empty requested"
+            export GPG_PASSPHRASE=""
+          else
+            export GPG_PASSPHRASE="$GPG_PASSPHRASE_PRELIM"
+          fi
+
+          echo "DEBUG GPG_PASSPHRASE ${GPG_PASSPHRASE}"
+
+          echo "GPG_PASSPHRASE=${GPG_PASSPHRASE}" >> $GITHUB_ENV
+
+          echo "ROVER_ACTION=JUMP_THE_FENCE" >> $GITHUB_ENV
+
+          # Verify GPG2 environment
+          if ! command -v gpg2 &> /dev/null
+          then
+            echo "Failed to locate gpg2 on this host.  GPG2 is required to continue."
+            exit 1
+          fi
+
+          gpg2 --version
+          export GPG_EXECUTABLE=$(command -v gpg2)
+          echo "DEBUG GPG_EXECUTABLE ${GPG_EXECUTABLE}"
+
+          echo "DEBUG MAVEN_SETTINGS_EXPERIM ${MAVEN_SETTINGS_EXPERIM}"
+          echo "DEBUG MAVEN_SETTINGS_FILE ${{ vars.MAVEN_SETTINGS_FILE }}"
+
+          # N.B. this is for debugging only.  TODO remove before release
+          mvn -s ${{ vars.MAVEN_SETTINGS_FILE }} help:effective-settings
+          # mvn help:effective-settings
       - name: Model release
         run: |
           cat << EOF > release.properties
