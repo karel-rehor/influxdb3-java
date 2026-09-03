@@ -94,8 +94,17 @@ jobs:
           # N.B. this is for debugging only.  TODO remove before release
           mvn -s ${{ vars.MAVEN_SETTINGS_FILE }} help:effective-settings
           # mvn help:effective-settings
+      - name: Script
+        run: |
+          echo "DEBUG IS_PRERELEASE ^^^${IS_PRERELEASE}^^^"
+          echo "DEBUG GITHUB_ACTOR ${GITHUB_ACTOR}"
+          ./scripts/on-release.sh
       - name: Model release
         run: |
+          if [[ "${IS_PRERELEASE}" == "true" ]]; then
+             echo "This is a pre release and will not be deployed to Maven Central."
+             exit 0
+          fi
           cat << EOF > release.properties
           scm.url=scm\:git\:https\://github.com/${GITHUB_REPOSITORY}.git
           scm.tag=${RELEASE_TAG_NAME}
