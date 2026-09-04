@@ -181,7 +181,15 @@ verify_version(){
   fi
 
   printf "pom.xml project version (%s) checks with release tag (%s): OK ✓\n" "${PROJECT_VERSION}" "${RELEASE_TAG_NAME}"
-  # TODO further checks
+
+  SCM_TAG=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='scm']/*[local-name()='tag']/text()")
+
+  if [ "${SCM_TAG}" != "${RELEASE_TAG_NAME}" ]
+  then
+    printf "SCM_TAG %s in pom.xml does not match tag %s" "${SCM_TAG}" "${RELEASE_TAG_NAME}"
+    prinf "%s\n" "${FAILURE_BOILERPLATE}"
+    exit 1
+  fi
 
 }
 

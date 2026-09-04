@@ -4,7 +4,7 @@ This document contains a general description and tips for releasing Influxdb3-ja
 
 ### Preparing the release.
 
-1. from `main` create a new release branch, e.g. `git branch chore/release-1.12.0`
+1. from `main` create a new release branch, e.g. `git branch chore/release-1.12.0 git && git switch chore/release-1.12.0`
 2. In the new branch, update the version settings in `pom.xml`
 
 ```
