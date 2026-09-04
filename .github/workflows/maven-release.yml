@@ -116,3 +116,23 @@ jobs:
             -Dgoals=deploy \
             -s ./deploy-settings.xml \
             -Darguments="-DskipTests -DskipITs -Dlicense.skip -DperformRelease=true"
+      - name: Prepare next cycle
+        run: |
+          if [[ "${IS_PRERELEASE}" == "true" ]]; then
+            echo "This is a prerelease so the next release cycle will not be prepared."
+            echo "TODO in production exit cleanly here.  But for debugging purposes currently continue"
+          fi
+          echo "Preparing next release cycle"
+
+          VERSION_CLEAN=${TEST_TAG_NAME:1}
+          PARTS=(${VERSION_CLEAN//./ })
+          NEW_MINOR=$((PARTS[1]+1))
+          NEXT_RELEASE="${PARTS[0]}.${NEW_MINOR}.${PARTS[2]}"
+          echo "DEBUG NEXT_RELEASE %s" "${NEXT_RELEASE}"
+          gh --version
+          git branch
+          mvn versions:set-scm-tag  -DnewTag="HEAD"
+          mvn versions:set -DnextSnapshot=true -DnextSnapshotIndexToIncrement=2
+          # DEBUG command below
+          head -n 72 pom.xml
+          # gh pr create -B base_branch -H branch_to_merge --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'

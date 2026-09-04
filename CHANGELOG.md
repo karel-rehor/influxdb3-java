@@ -8,6 +8,7 @@
 - `.github/workflows/maven-release.yml` - ~~some tasks defined in `maven-release.yml` are covered by the maven release plugin workflow.  This includes automated tag generation, which may cause conflicts.  So, the workflow needs a review and some revisions~~. DONE
     - Workflow successfully revised.  But no longer relying on `mvn release:prepare` to create tags and update `pom.xml`.
     - So need to ensure that support scripts and workflow put everything into place correctly. IN PROGRESS
+       -  add scm:tag check to on-release.sh - 1eee676.  N.B. this was still using HEAD in jar and pom pushed to Maven Central.
 - Look into using `mvn versions:set` for updating pom.xml after successful release IN PROGRESS
 - Need to implement documentation releasing step.  From manual instructions... TODO
 ```
