@@ -162,7 +162,7 @@ verify_changelog() {
 
 verify_version(){
   printf "verifying version\n"
-  PROJECT_VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" ${POM_XML_PATH}"")
+  PROJECT_VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" "${POM_XML_PATH}")
   printf "Project version from pom.xml is %s\n"  "${PROJECT_VERSION}"
 
   if [[  "${PROJECT_VERSION}" == *SNAPSHOT ]]
@@ -182,7 +182,7 @@ verify_version(){
 
   printf "pom.xml project version (%s) checks with release tag (%s): OK ✓\n" "${PROJECT_VERSION}" "${RELEASE_TAG_NAME}"
 
-  SCM_TAG=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='scm']/*[local-name()='tag']/text()")
+  SCM_TAG=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='scm']/*[local-name()='tag']/text()" "${POM_XML_PATH}")
 
   if [ "${SCM_TAG}" != "${RELEASE_TAG_NAME}" ]
   then
