@@ -1,4 +1,6 @@
-## 1.12.0 [unreleased]
+## 1.12.0 [2026-09-22]
+
+__Note__ - this is a test of upstream automated releasing.  Not to be distributed in final step.
 
 ### CI
 
